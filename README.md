@@ -10,7 +10,7 @@ docker buildx build -t summit4you/cuda-12.1.1-cudnn8-conda-ubuntu20.04 -f Docker
 # 创建容器
 
 ```
-docker run --rm -itd --gpus all  --ipc=host --net=host --shm-size=32g --ulimit memlock=-1  --name torchnet summit4you/cuda-12.1.1-cudnn8-conda-ubuntu20.04 bash
+docker run --rm -itd --gpus all  --ipc=host --net=host --shm-size=32g --ulimit memlock=-1 --privileged -e "DISPLAY"  -v "/tmp/.X11-unix:/tmp/.X11-unix:rw" --name torchnet summit4you/cuda-12.1.1-cudnn8-conda-ubuntu20.04 bash
 
 ```
 
