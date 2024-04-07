@@ -39,3 +39,7 @@ git clone https://github.com/summit4you/torchnet.git
 cd torchnet
 python3 test_mnist.py
 ```
+
+# 图像分类用到的数据集
+
+- [hymenoptera_data](https://download.pytorch.org/tutorial/hymenoptera_data.zip)
