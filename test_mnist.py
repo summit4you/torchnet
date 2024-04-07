@@ -97,7 +97,7 @@ def main():
                         help='For Saving the current Model')
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
-    use_mps = not args.no_mps and torch.backends.mps.is_available()
+    use_mps = False
 
     torch.manual_seed(args.seed)
 
