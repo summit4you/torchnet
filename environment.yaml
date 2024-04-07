@@ -1,20 +1,21 @@
 name: torchnet
 channels:
-        - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
-        - nvidia
-        - defaults
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
+  - defaults
 dependencies:
-        - pytorch 
-        - torchvision 
-        - torchaudio 
-        - pytorch-cuda=12.1
-        - numpy
-        - Pillow
-        - matplotlib
-        - tensorboard
-        - tqdm
-        - opencv
-        - scipy
-        - scikit-image
-        - imageio
-        - imgaug
+  - python=3.7.6
+  - pytorch=1.11
+  - torchvision=0.13
+  - cudatoolkit=11.3
+  - matplotlib
+  - tensorboard
+  - scipy
+  - opencv
+  - tqdm
+  - opt_einsum
+  - imageio
+  - scikit-image
+  - p7zip
+  - PyYAML
+
