@@ -1,0 +1,63 @@
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu20.04
+ENV LANG="zh_CN.UTF-8" \
+    LANGUAGE="zh_CN:zh:en_US:en" \
+    DEBIAN_FRONTEND=noninteractive \
+    DEBCONF_NONINTERACTIVE=true \
+    GTK_IM_MODULE=fcitx \
+    QT_IM_MODULE=fcitx \
+    XMODIFIERS=@im=fcitx 
+RUN truncate -s0 /tmp/preseed.cfg \
+	&& echo "tzdata tzdata/Areas select Asia" >> /tmp/preseed.cfg  \
+	&& echo "tzdata tzdata/Zones/Asia select Shanghai" >> /tmp/preseed.cfg \
+	&& debconf-set-selections /tmp/preseed.cfg \
+	&& rm -f /etc/timezone /etc/localtime \
+	&& rm /etc/apt/sources.list \
+	&& touch /etc/apt/sources.list \
+ 	&& echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/  focal main restricted universe multiverse" >> /etc/apt/sources.list \
+ 	&& echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse" >> /etc/apt/sources.list \
+ 	&& echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse" >> /etc/apt/sources.list \
+ 	&& echo "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse" >> /etc/apt/sources.list \
+ 	&& rm /etc/apt/sources.list.d/*  \
+	&& apt-get -qqy --no-install-recommends update \
+ 	&& DEBIAN_FRONTEND=noninteractive apt-get -qqy --no-install-recommends install --no-upgrade  apt-utils tzdata vim curl net-tools wget git tmux inetutils-ping  language-pack-zh-hans unzip  \
+ 	&& touch /var/lib/locales/supported.d/local \
+ 	&& echo 'en_US.UTF-8 UTF-8\n\
+zh_CN.UTF-8 UTF-8\n\
+zh_CN.GBK GBK\n\
+zh_CN GB2312\n' \
+>> /var/lib/locales/supported.d/local \
+	&& locale-gen \
+	&& wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh \
+    && echo 'if ! [[ $PATH =~ "$HOME/miniconda3/bin" ]]; then\n \
+  PATH="$HOME/miniconda3/bin:$PATH"\n \
+fi' \
+>> /root/.bashrc \
+	&& export PATH="/root/miniconda3/bin:$PATH" \
+	&& touch /root/.condarc \
+	&& echo 'channels:\n\
+  - defaults\n\
+show_channel_urls: true\n\
+default_channels:\n\
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main\n\
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r\n\
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2\n\
+custom_channels:\n\
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/\n' \
+>> /root/.condarc \
+	&& conda clean -i \
+	&& apt install -y libarchive-dev \
+	&& conda install -c conda-forge -y mamba \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& rm -Rf /tmp/*
+
